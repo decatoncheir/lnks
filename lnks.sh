@@ -10,12 +10,14 @@ if ! type fzf &> /dev/null; then
 fi
 
 keep_open=false
+incognito=false
 dir="$(dirname "$0")"
 
 usage () {
     echo "Usage: $(basename "$0") [OPTIONS...]"
     echo "  -k        --keep-open     Keep lnks open after selecting a bookmark"
     echo "  -d <dir>  --dir <dir>     Specify a directory where bookmarks files are stored"
+    echo "  -i        --incognito     Open links in Chromium incognito mode"
     exit 0
 }
 
@@ -23,13 +25,19 @@ while [[ "$#" -gt 0 ]]; do
     case $1 in
         -k|--keep-open) keep_open=true ;;
         -d|--dir) dir="$2"; shift ;;
+        -i|--incognito) incognito=true ;;
         -h|--help) usage ;;
         *) echo "Unknown parameter passed: $1" >&2; exit 1 ;;
     esac
     shift
 done
 
-if type explorer.exe &> /dev/null; then
+if type chromium &> /dev/null; then
+    open_command="chromium"
+    if $incognito ; then
+        open_command="chromium --incognito"
+    fi
+elif type explorer.exe &> /dev/null; then
     open_command="explorer.exe"
 elif type open &> /dev/null; then
     open_command="open"
