@@ -41,14 +41,13 @@ done
 if type chromium &>/dev/null; then
     open_command="chromium"
     if $incognito; then
-        open_command="chromium --incognito"
+        open_command="$open_command --incognito"
     fi
 elif [ -d "/Applications/Google Chrome.app" ]; then
     open_command="open -na 'Google Chrome'"
     if $incognito; then
         open_command="$open_command --args --incognito"
     fi
-    echo $open_command
 elif type explorer.exe &>/dev/null; then
     open_command="explorer.exe"
 elif type open &>/dev/null; then
